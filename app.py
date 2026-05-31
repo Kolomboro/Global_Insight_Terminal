@@ -1,15 +1,25 @@
 import streamlit as st
-import os
 
-country = st.text_input("Країна", value="Poland")
+st.set_page_config(page_title="Global Insight Terminal", layout="wide")
 
-# Ключ: спочатку з Streamlit secrets, fallback на env var
-api_key = st.secrets.get("GEMINI_API_KEY", os.getenv("GEMINI_API_KEY"))
+st.title("Global Insight Terminal")
 
-if st.button("Оновити дані"):
-    if not api_key:
-        st.error("Немає GEMINI_API_KEY у secrets або env.")
-    else:
-        df = fetch_migration_data_gemini(country, api_key)
-        st.dataframe(df)
-        st.pydeck_chart(build_deck_from_migration_df(df), use_container_width=True)
+with st.sidebar:
+    with st.expander("Шари", expanded=True):
+        migration = st.checkbox("Міграція")
+        cyberattacks = st.checkbox("Кібератаки")
+        conflicts = st.checkbox("Конфлікти")
+
+    with st.expander("Налаштування мови", expanded=True):
+        language = st.radio("Оберіть мову", ["Українська", "English", "Polski"])
+
+st.info("Система готова")
+if cyberattacks:
+    st.header("Останні дані про атаки")
+    st.markdown(
+        """
+        - DDoS-атака на регіональний дата-центр (підвищена мережна активність).
+        - Фішингова кампанія проти державних установ через підроблені email-домени.
+        - Спроба проникнення в корпоративну VPN-мережу через вразливий обліковий запис.
+        """
+    )
