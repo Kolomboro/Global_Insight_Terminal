@@ -133,6 +133,7 @@ with st.sidebar:
         show_res = st.checkbox("Ресурси (Геополітика)", value=False)
         show_panic = st.checkbox("Індекс паніки", value=False)
         show_mil = st.checkbox("Дрони / Ракети / Удари", value=False)
+        show_epidemics = st.checkbox("Епідемії", value=False)
 
     with st.expander("Налаштування мови", expanded=True):
         language = st.radio("Оберіть мову", ["Українська", "English", "Polski"])
@@ -168,6 +169,14 @@ cyber_df = pd.DataFrame(
         {"lat": 50.4501, "lon": 30.5234, "count": 1200, "name": "Kyiv Cyber Events"},
         {"lat": 51.5072, "lon": -0.1276, "count": 900, "name": "London Incidents"},
         {"lat": 38.9072, "lon": -77.0369, "count": 1100, "name": "Washington Alerts"},
+    ]
+)
+
+epidemics_df = pd.DataFrame(
+    [
+        {"lat": 41.0082, "lon": 28.9784, "count": 34, "name": "Istanbul Outbreak"},
+        {"lat": 19.4326, "lon": -99.1332, "count": 21, "name": "Mexico City Cases"},
+        {"lat": -23.5505, "lon": -46.6333, "count": 18, "name": "Sao Paulo Cluster"},
     ]
 )
 
@@ -256,6 +265,9 @@ if show_panic:
 
 if show_mil:
     layers.append(make_layer(mil_df, [127, 140, 141, 185]))
+
+if show_epidemics:
+    layers.append(make_layer(epidemics_df, [142, 68, 173, 185]))  
 
 
 # -------------------------
