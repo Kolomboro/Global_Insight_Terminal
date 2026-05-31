@@ -43,7 +43,16 @@ def fetch_migration_data_gemini(country: str) -> pd.DataFrame:
         raise ValueError("Відсутній GEMINI_API_KEY у Streamlit secrets.")
 
     genai.configure(api_key=api_key)
-    model = genai.GenerativeModel("gemini-pro")
+
+# Автовибір першої доступної моделі з підтримкою generateContent
+available_models = [
+    m.name
+    for m in genai.list_models()
+    if "generateContent" in getattr(m, "supported_generation_methods", [])
+]
+
+selected_model = available_models[0] if available_models else "gemini-1.5-flash-latest"
+model = genai.GenerativeModel(selected_model)
 
     prompt = f"""
 Ти аналітик міграції. Поверни ТІЛЬКИ валідний JSON без пояснень.
